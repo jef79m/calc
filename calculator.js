@@ -1,7 +1,8 @@
 $(document).ready(function() {
 	var mem = 0;
 	var newNum = true;
-	var screenLength = 14;
+	var screenLength = 11;
+	var nextop = '='
 
 	$("#display").text("0");
 	
@@ -17,50 +18,57 @@ $(document).ready(function() {
 				$("#display").text("");	
 			}
 			var result = $("#display").text();
-			if (result.length > 13) return;
-			if (result == "0" && value != ".") result = "";
+			if (result.length > screenLength) return;
+			if (total == 0 && value != ".") result = "";
 			if (value == '.' && result.indexOf(".") > -1) return;
 			result = result.concat(value);
 			$("#display").text(result);
 			return;
 		}
-		else if (type == "operator") {
-			switch(value) {
-				case "C":
-					if ($("#display").text() == "0") {
-						total = 0;
-						mem = 0;
-					}
-					$("#display").text("0");
-					break;
+		
+		switch(nextop) {
 				case "+":
 					mem += total;
-					$("#display").text(String(mem).substring(0,screenLength));
 					newNum = true;
 					break;
 				case "-":
 					mem -= total;
-					$("#display").text(String(mem).substring(0,screenLength));
 					newNum = true;
 					break;
 				case "/":
 					if (total == 0) break;
 					mem /= total;
-					$("#display").text(String(mem).substring(0,screenLength));
 					newNum = true;
 					break;
 				case "*":
 					mem *= total;
-					$("#display").text(String(mem).substring(0,screenLength));
 					newNum = true;
 					break;
-				default:
+				case "=":
+					mem = total;
 					newNum = true;
-					break; 
+					break;
 			}
-
-			return;
+		
+		if (type == "operator") {
+			switch(value) {
+				case "C":
+					if ($("#display").text() == "0") {
+						mem = 0;
+						nextop = '='
+					}
+					total = 0;
+					$("#display").text("0");
+					return;
+					break;
+				case("="):
+					newNum = true;
+				default:
+					nextop = value;
+			}
 		}
+
+		$("#display").text(String(mem).substring(0,screenLength));
 	});
 
 	$(".button").mouseup(function(e) {

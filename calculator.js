@@ -20,6 +20,7 @@ $(document).ready(function() {
 			var result = $("#display").text();
 			if (result.length > screenLength) return;
 			if (total == 0 && value != ".") result = "";
+			console.log(result.indexOf("."));
 			if (value == '.' && result.indexOf(".") > -1) return;
 			result = result.concat(value);
 			$("#display").text(result);
